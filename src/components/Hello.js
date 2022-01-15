@@ -1,25 +1,14 @@
-import React, {useState, useEffect, useRef, useLayoutEffect} from 'react'
-import { useFetch } from './useFetch'
-import {useMeasure} from './useMeasure'
+import React, { useRef } from 'react'
 
-function Hello() {
+function Hello({ increment }) {
 
-    const [count, setCount] = useState(() => JSON.parse(localStorage.getItem("count")))
-    const {loading, data} = useFetch(`http://numbersapi.com/${count}/trivia`)
+    const ref = useRef(0)
 
-    useEffect(() => {
-        localStorage.setItem('count', JSON.stringify(count))
-    }, [count])
-
-    const [rect, divRef] = useMeasure([data])
+    
 
     return (
         <>
-            <div style={{ display: 'flex' }}>
-                <div ref={divRef}>{ !data ? 'loading...' : data }</div>
-            </div>
-            <pre>{JSON.stringify(rect, null, 2)}</pre>
-            <button onClick={() => { setCount(() => count + 1); }}>+</button>
+            <button onClick={increment} >+</button>
         </>
     )
 }
