@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react'
 import { useForm } from './useForm'
 import Hello from './Hello'
+import { useMeasure } from './useMeasure'
 
 function State() {
 
@@ -9,14 +10,23 @@ function State() {
 
     const inputRef = useRef()
 
+    const helloRef = useRef(() => console.log("Focusing"))
+
+    useLayoutEffect(() => {
+        console.log(inputRef.current.getBoundingClientRect())
+    }, [])
+
+    const [rect, inputRef2] = useMeasure([])
+
     return (
         <>
             <div className="">
                 {showHello && <Hello />}
                 <button onClick={() => setShowHello(!showHello)}>Toggle</button>
-                <button onClick={() => { console.log(inputRef.current.focus()) }}>focus</button>
+                <button onClick={() => { inputRef.current.focus(); helloRef.current(); }}>focus</button>
                 <input ref={inputRef} type="text" name='email' value={values.email} onChange={handleChange} placeholder='Email' />
-                <input type="password" name='password' value={values.password} onChange={handleChange} placeholder='Password' />
+                <input ref={inputRef2} type="password" name='password' value={values.password} onChange={handleChange} placeholder='Password' />
+                <div>{JSON.stringify(rect, null, 2)}</div>
             </div>
         </>
     )
